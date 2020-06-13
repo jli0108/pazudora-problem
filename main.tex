@@ -9,9 +9,10 @@
 \pagestyle{fancy}
 \fancyhf{}
 \setlength{\parindent}{0pt}
-\fancyhead[c]{Probabilistic and Combinatorial Analysis of Rainbow Board in PAD}
+\fancyhead[c]{Probabilistic and Combinatorial Analysis of Rainbow Board Refresh in PAD}
         
 \begin{document}
+\tableofcontents
 \section{Introduction}
 Consider the standard $5\times 6$ board in PAD. If you apply a rainbow board refresh (assuming all six standard orbs are equally probable), what is the probability of $i$ matches (including skyfalls), for $i\in\N$?
 
@@ -25,6 +26,7 @@ Simplify the problem down even more, now it's the $5\times 4$ board. In this cas
 To consider skyfalls, we may consider the boards as states of a Markov chain. The expected 
 
 \section{$2\times2$ board with 2-matches}
+\subsection{Initial board}
 Consider a simplification of the problem:
 The board is now $2 \times 2$, and a match occurs when at least two orbs are adjacent to each other.
 
@@ -33,6 +35,15 @@ It is possible to enumerate all of the $6^4=1296$ possible boards.
     \item 0 combos
     \begin{itemize}
         \item Each of the four orbs are distinct colors, so there are $\binom{6}{4}\cdot 4!=360$ boards
+        \begin{center}
+            \begin{tabular}{|c|c|}
+            \hline
+            a & b \\
+            \hline
+            c & d \\
+            \hline
+            \end{tabular}
+        \end{center}
         \item Two of the four orbs are the same color. In order to avoid matches, the two same-colored orbs are diagonal from each other. Therefore there are two possibilities.
         \begin{center}
             \begin{tabular}{|c|c|}
@@ -52,12 +63,99 @@ It is possible to enumerate all of the $6^4=1296$ possible boards.
             \end{tabular}
         \end{center}
         This results in $2\cdot\binom{6}{3}\cdot 3!=240$ boards.
-        \item Two orbs are the same color and the remaining two orbs are both a different color. To avoid matches, the same-color pairs must be diagonal from each other, and there is only a single case. This results in $\binom{6}{2}\cdot 2!=30$ boards.
+        \item Two orbs are the same color and the remaining two orbs are both the same different color. To avoid matches, the same-color pairs must be diagonal from each other, and there is only a single case.
+        \begin{center}
+            \begin{tabular}{|c|c|}
+            \hline
+            a & b \\
+            \hline
+            b & a \\
+            \hline
+            \end{tabular}
+        \end{center}
+        This results in $\binom{6}{2}\cdot 2!=30$ boards.
     \end{itemize}
     In total, the probability of 0 combos is $(360+240+30)/1296=35/72$.
     \item 1 combo
-    
+    \begin{itemize}
+        \item With three colors, we can have the following possibilities:
+        \begin{center}
+            \begin{tabular}{|c|c|}
+            \hline
+            a & b \\
+            \hline
+            a & c \\
+            \hline
+            \end{tabular}
+            \quad
+            \begin{tabular}{|c|c|}
+            \hline
+            a & a \\
+            \hline
+            b & c \\
+            \hline
+            \end{tabular}
+            \quad
+            \begin{tabular}{|c|c|}
+            \hline
+            b & c \\
+            \hline
+            a & a \\
+            \hline
+            \end{tabular}
+            \quad
+            \begin{tabular}{|c|c|}
+            \hline
+            b & a \\
+            \hline
+            c & a \\
+            \hline
+            \end{tabular}
+        \end{center}
+        This results in $4\cdot \binom{6}{3}\cdot 3!=480$ boards.
+        \item WIth two colors, we have the following possibilities:
+        \begin{center}
+            \begin{tabular}{|c|c|}
+            \hline
+            a & a \\
+            \hline
+            a & b \\
+            \hline
+            \end{tabular}
+            \quad
+            \begin{tabular}{|c|c|}
+            \hline
+            a & a \\
+            \hline
+            b & a \\
+            \hline
+            \end{tabular}
+            \quad
+            \begin{tabular}{|c|c|}
+            \hline
+            b & a \\
+            \hline
+            a & a \\
+            \hline
+            \end{tabular}
+            \quad
+            \begin{tabular}{|c|c|}
+            \hline
+            a & b \\
+            \hline
+            a & a \\
+            \hline
+            \end{tabular}
+        \end{center}
+        This results in $4\cdot \binom{6}{2}\cdot 2!=120$ boards.
+        \item 
+        If all four orbs are the same color, there is only one configuration and $6$ possible boards.
+    \end{itemize}
+    In total, the probability of 1 combo is $(480+120+6)/1296=101/216$.
     \item 2 combo
-    
+    \begin{itemize}
+        \item The only possible configuration for two combos is when two 
+    \end{itemize}
 \end{itemize}
+\subsection{Skyfalls enabled}
 \end{document}
