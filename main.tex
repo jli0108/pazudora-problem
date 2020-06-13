@@ -1,29 +1,28 @@
 \documentclass[12pt]{article}
-\usepackage[utf8x]{inputenc}
-\usepackage{amsmath,amssymb,relsize,enumitem,fancyhdr,parskip}
+\usepackage{amsmath,amssymb,relsize,enumitem,fancyhdr,parskip, pgfplots}
 \usepackage[margin=1in]{geometry}
+\usepackage{CJKutf8}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
 \setlength{\headheight}{28pt}
+\pgfplotsset{compat=1.16}
 \pagestyle{fancy}
 \fancyhf{}
 \setlength{\parindent}{0pt}
-\fancyhead[c]{Probabilistic and Combinatorial Analysis of Rainbow Board Refresh in PAD}
+\fancyhead[c]{Probabilistic and Combinatorial Analysis of Rainbow Board Refresh in \begin{CJK}{UTF8}{min}パズドラ\end{CJK}}
+\fancyfoot[c]{\thepage}
         
 \begin{document}
 \tableofcontents
 \section{Introduction}
-Consider the standard $5\times 6$ board in PAD. If you apply a rainbow board refresh (assuming all six standard orbs are equally probable), what is the probability of $i$ matches (including skyfalls), for $i\in\N$?
-
-This is a deceptively hard problem. I hope there is a nice closed form solution, but there probably isn't since it seems to involve partitioning.
+Consider the standard $5\times 6$ board in the popular mobile game \begin{CJK}{UTF8}{min}パズドラ\end{CJK}. If you apply a rainbow board refresh (assuming all six standard orbs are equally probable), what is the probability of $i$ matches (including skyfalls), for $i\in\N$?
+This is a deceptively hard problem as far as I can tell. I hope there is a nice closed form solution, but there probably isn't since it seems to involve partitioning.
 
 Consider the problem with skyfalls disabled.
 This limits the number of matches to $i=0,1,\dots,10$.
 
-Simplify the problem down even more, now it's the $5\times 4$ board. In this case we only have $6^{5\times 4}/6!$ boards to consider, and only $i=0,1,\dots,6$ combos to consider.
-
-To consider skyfalls, we may consider the boards as states of a Markov chain. The expected 
+To consider skyfalls, we may consider the boards as states of a Markov chain (maybe). The expected 
 
 \section{$2\times2$ board with 2-matches}
 \subsection{Initial board}
@@ -154,8 +153,85 @@ It is possible to enumerate all of the $6^4=1296$ possible boards.
     In total, the probability of 1 combo is $(480+120+6)/1296=101/216$.
     \item 2 combo
     \begin{itemize}
-        \item The only possible configuration for two combos is when two 
+        \item Two adjacent orbs are the same color, and the other two adjacent orbs are another same color.
+        \begin{center}
+            \begin{tabular}{|c|c|}
+            \hline
+            a & b \\
+            \hline
+            a & b \\
+            \hline
+            \end{tabular}
+            \qquad
+            \begin{tabular}{|c|c|}
+            \hline
+            a & a \\
+            \hline
+            b & b \\
+            \hline
+            \end{tabular}
+        \end{center}
+        This results in $2\cdot\binom{6}{2}\cdot 2!=60$ boards.
+    \end{itemize}
+    The probability of 2 combos is $60/1296=5/108$.
+\end{itemize}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    title=Initial Distribution,
+	ylabel=Probability,
+	ymax=1,
+	enlargelimits=0.15,
+	ybar,
+	xtick=data,
+	xlabel=Combos
+]
+\addplot coordinates {(0, 35/72) (1, 101/216) (2, 5/108)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\subsection{Skyfalls enabled}
+Now we can consider the board configurations as states of a discrete-time stochastic process. The first thing we should figure out is if this process is Markovian.
+
+The best way to assign states is probably the distinct board configurations as listed above.
+
+\begin{itemize}
+    \item Clearly the boards with 0 matches/combos are absorbing states as they do not give rise to any skyfalls, let alone skyfall combos. Any prior board information does not impact the future states since there cannot be any skyfalls.
+    \item 
+    \begin{itemize}
+        \item The three color case leads to three distinct possible remainder boards.
+        \begin{center}
+            \begin{tabular}{|c|c|}
+            \hline
+             &  \\
+            \hline
+            a & b \\
+            \hline
+            \end{tabular}
+            \qquad
+            \begin{tabular}{|c|c|}
+            \hline
+            a & \phantom{a} \\
+            \hline
+            b & \phantom{a} \\
+            \hline
+            \end{tabular}
+            \qquad
+            \begin{tabular}{|c|c|}
+            \hline
+            \phantom{a} & a \\
+            \hline
+            \phantom{a} & b \\
+            \hline
+            \end{tabular}
+        \end{center}
+        The first board occurs with conditional probability $1/2$, while the other two each occur with probability $1/4$.
+        
+        What are the possible boards after skyfall? Find out on the next episode...
+        \item 
+        The two color case...
+        \item The single color case is equivalent to a complete board refresh. Therefore all of the boards are once again equally likely.
     \end{itemize}
 \end{itemize}
-\subsection{Skyfalls enabled}
+
 \end{document}
