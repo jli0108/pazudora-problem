@@ -1,10 +1,13 @@
 \documentclass[12pt]{article}
 \usepackage{amsmath,amssymb,relsize,enumitem,fancyhdr,parskip, pgfplots}
+\usepackage{amsthm}
 \usepackage[margin=1in]{geometry}
 \usepackage{CJKutf8}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
 \setlength{\headheight}{28pt}
 \pgfplotsset{compat=1.16}
 \pagestyle{fancy}
@@ -250,7 +253,7 @@ Keep in mind this also assumes the $c$ different orb colors are assumed to be eq
 
 
 \section{$5\times 6$ board with 3-matches}
-We return to the situation with standard 3-matches, but still on a smaller board for simplicity.
+We return to the classical problem on a $5\times 6$ board, allowing 3-matches.
 
 \subsection{Classifying boards based on number of colors}
 
@@ -289,6 +292,18 @@ In a similar fashion, the number of boards with exactly $i$ colors is $\binom{6}
     \end{tabular}
 \renewcommand{\arraystretch}{2}
 \end{center}
+These exact probabilities indicate that it is extremely likely to end up with a board containing five or six colors, while monocolor, bicolor, tricolor, and quadcolor boards almost never occur. 
+
+\begin{definition}
+    A board is called \textbf{rainbow matchable} if it contains at least 3 orbs of each color.
+\end{definition}
+
+A few natural questions arise:
+\begin{enumerate}
+    \item Unconditionally (that is, a board with or without preexisting matches), what is the probability that the board is rainbow matchable?
+    \item Given a 0 combo board, what is the probability that the board is rainbow matchable.?
+\end{enumerate}
+At first glance, the answer to these two problems might seem like they should be identical. However, maybe it is possible that 0 combo boards increase (or decrease) the likelihood because some configurations are favored. For example when considering 0 combo boards, monocolor boards are excluded entirely, and the majority of bicolor and tricolor boards are excluded as well.
 \section{$m\times n$ board with $k$-matches}
 I don't know if this is even possible to study further than running a few Monte Carlo simulations. Combinatorics is hard.
 \end{document}
