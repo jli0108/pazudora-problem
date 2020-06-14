@@ -26,10 +26,10 @@ To consider skyfalls, we may consider the boards as states of a Markov chain (ma
 
 \section{$2\times2$ board with 2-matches}
 \subsection{Initial board}
-Consider a simplification of the problem:
-The board is now $2 \times 2$, and a match occurs when at least two orbs are adjacent to each other.
+Consider a simplification of the problem.
+The board is now $2 \times 2$, and a match occurs when at least two orbs are adjacent (non-diagonal) to each other.
 
-It is possible to enumerate all of the $6^4=1296$ possible boards.
+It is not hard to enumerate all of the $6^4=1296$ possible boards, grouping them by resultant combos and board configuration.
 \begin{itemize}
     \item 0 combos
     \begin{itemize}
@@ -43,6 +43,7 @@ It is possible to enumerate all of the $6^4=1296$ possible boards.
             \hline
             \end{tabular}
         \end{center}
+        This probability is $360/1296=5/18$.
         \item Two of the four orbs are the same color. In order to avoid matches, the two same-colored orbs are diagonal from each other. Therefore there are two possibilities.
         \begin{center}
             \begin{tabular}{|c|c|}
@@ -62,6 +63,7 @@ It is possible to enumerate all of the $6^4=1296$ possible boards.
             \end{tabular}
         \end{center}
         This results in $2\cdot\binom{6}{3}\cdot 3!=240$ boards.
+        This probability is $240/1296=5/27$.
         \item Two orbs are the same color and the remaining two orbs are both the same different color. To avoid matches, the same-color pairs must be diagonal from each other, and there is only a single case.
         \begin{center}
             \begin{tabular}{|c|c|}
@@ -73,6 +75,7 @@ It is possible to enumerate all of the $6^4=1296$ possible boards.
             \end{tabular}
         \end{center}
         This results in $\binom{6}{2}\cdot 2!=30$ boards.
+        This probability is $30/1296=5/216$.
     \end{itemize}
     In total, the probability of 0 combos is $(360+240+30)/1296=35/72$.
     \item 1 combo
@@ -196,8 +199,11 @@ Now we can consider the board configurations as states of a discrete-time stocha
 The best way to assign states is probably the distinct board configurations as listed above.
 
 \begin{itemize}
-    \item Clearly the boards with 0 matches/combos are absorbing states as they do not give rise to any skyfalls, let alone skyfall combos. Any prior board information does not impact the future states since there cannot be any skyfalls.
-    \item 
+    \item 0 combo
+    \begin{itemize}
+        \item Clearly the boards with 0 matches/combos are absorbing states as they do not give rise to any skyfalls, let alone skyfall combos. Any prior board information does not impact the future states since there cannot be any skyfalls.
+    \end{itemize}
+    \item 1 combo
     \begin{itemize}
         \item The three color case leads to three distinct possible remainder boards.
         \begin{center}
@@ -230,8 +236,59 @@ The best way to assign states is probably the distinct board configurations as l
         What are the possible boards after skyfall? Find out on the next episode...
         \item 
         The two color case...
-        \item The single color case is equivalent to a complete board refresh. Therefore all of the boards are once again equally likely.
+        \item The single color case is equivalent to a complete board refresh. Therefore all of the initial boards are once again equally likely. Prior information about the board is irrelevant.
+    \end{itemize}
+    \item 2 combo
+    \begin{itemize}
+        \item All of the orbs are cleared, so the initial boards are equally likely. Prior information about the board is irrelevant.
     \end{itemize}
 \end{itemize}
+\subsection{Poison, mortal poison, jammer, bomb orbs enabled}
+What if we want to consider more than just the six standard orb colors? If we generalize to $c$ colors, the number of boards increases to $c^4$ boards. However, the same analysis of board configurations as before works, replacing all instances of 6 with $c$, as long as $c\geq 2\times 2$. If $c<4$, then the possible board configurations changes, along with their associated probabilities.
 
+Keep in mind this also assumes the $c$ different orb colors are assumed to be equally probable. Otherwise, the problem gets even more complicated.
+
+
+\section{$5\times 6$ board with 3-matches}
+We return to the situation with standard 3-matches, but still on a smaller board for simplicity.
+
+\subsection{Classifying boards based on number of colors}
+
+Here we count all the boards with exactly $i$ number of colors for $i=1,\dots,6$ and compute the probabilities of occurrence after a random board refresh. Note that the total number of boards is $6^{5\times 6}=6^{30}$.
+
+If a board is monocolor, there are $\binom{6}{1}$ boards, since we choose one color from the possible six. Thus the probability of occurrence is $\binom{6}{1}/6^{30}$.
+
+How many distinct bicolor boards are there? Since we can choose two out of six colors and one of the two colors for each orb, there are $\binom{6}{2}\cdot 2^{30}$ boards with at most two colors. This includes all of the monocolor boards, so number of strictly bicolor boards is $\binom{6}{2}\cdot 2^{30}-\binom{6}{1}$.
+
+In a similar fashion, the number of boards with exactly $i$ colors is $\binom{6}{i}\cdot i^{30}-\binom{6}{i-1}\cdot (i-1)^{30}$. The probability of having a board with $i$ colors is $\left[\binom{6}{i}\cdot i^{30}-\binom{6}{i-1}\cdot (i-1)^{30}\right]/6^{30}$.
+
+\begin{center}
+\renewcommand{\arraystretch}{2}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        Number of Colors & Number of Boards & Approximate Probability \\
+        \hline\hline
+        $1$ & $\binom{6}{1}$ & $%\binom{6}{1}/6^{30}\approx 
+        2.71\times 10^{-23}$ \\
+        \hline
+        $2$ & $\binom{6}{2}\cdot 2^{30}-\binom{6}{1}$ & $%\left[\binom{6}{2}\cdot 2^{30}-\binom{6}{1}\right]/6^{30}\approx
+        7.29\times 10^{-14}$ \\
+        \hline
+        $3$ & $\binom{6}{3}\cdot 3^{30}-\binom{6}{2}\cdot 2^{30}$ & $%\left[\binom{6}{3}\cdot 3^{30}-\binom{6}{2}\cdot 2^{30}\right]/6^{30}\approx 
+        1.86\times 10^{-8}$ \\
+        \hline
+        $4$ & $\binom{6}{4}\cdot 4^{30}-\binom{6}{3}\cdot 3^{30}$ & $%\left[\binom{6}{4}\cdot 4^{30}-\binom{6}{3}\cdot 3^{30}\right]/6^{30}\approx 
+        7.82\times 10^{-5}$ \\
+        \hline
+        $5$ & $\binom{6}{5}\cdot 5^{30}-\binom{6}{4}\cdot 4^{30}$ & $%\left[\binom{6}{5}\cdot 5^{30}-\binom{6}{4}\cdot 4^{30}\right]/6^{30}\approx 
+        2.52\times 10^{-2}$ \\
+        \hline
+        $6$ & $\binom{6}{6}\cdot 6^{30}-\binom{6}{5}\cdot 5^{30}$ & $%\left[\binom{6}{6}\cdot 6^{30}-\binom{6}{5}\cdot 5^{30}\right]/6^{30}\approx 
+        0.975$ \\
+        \hline
+    \end{tabular}
+\renewcommand{\arraystretch}{2}
+\end{center}
+\section{$m\times n$ board with $k$-matches}
+I don't know if this is even possible to study further than running a few Monte Carlo simulations. Combinatorics is hard.
 \end{document}
