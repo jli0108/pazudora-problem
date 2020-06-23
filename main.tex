@@ -238,12 +238,12 @@ The best way to assign states is probably the distinct board configurations as l
         
         What are the possible boards after skyfall? Find out on the next episode...
         \item 
-        The two color case...
+        The two color case with a single combo results in a single remainder orb at the lower left or lower right, each with equal probability. The color of the remainder orb is known, but no other information about the board configuration is known. Therefore all of the initial boards, restricted to those with the appropriate color assignments are possible. That is, we think about all the possible boards and divide by six to exclude those with the inconsistent remainder orb.
         \item The single color case is equivalent to a complete board refresh. Therefore all of the initial boards are once again equally likely. Prior information about the board is irrelevant.
     \end{itemize}
     \item 2 combo
     \begin{itemize}
-        \item All of the orbs are cleared, so the initial boards are equally likely. Prior information about the board is irrelevant.
+        \item All of the orbs are cleared, so the initial boards are all equally likely. Prior information about the board is irrelevant.
     \end{itemize}
 \end{itemize}
 \subsection{Poison, mortal poison, jammer, bomb orbs enabled}
@@ -304,6 +304,19 @@ A few natural questions arise:
     \item Given a 0 combo board, what is the probability that the board is rainbow matchable.?
 \end{enumerate}
 At first glance, the answer to these two problems might seem like they should be identical. However, maybe it is possible that 0 combo boards increase (or decrease) the likelihood because some configurations are favored. For example when considering 0 combo boards, monocolor boards are excluded entirely, and the majority of bicolor and tricolor boards are excluded as well.
+\subsection{Classifying monocolor boards}
+There are only six of them, each resulting in another board refresh. This subsection is only included for completeness.
+\subsection{Classifying bicolor boards}
+We know there are $\binom{6}{2}\cdot 2^{30}-\binom{6}{1}$ bicolor boards from earlier.
+
+If we fix the two colors, there are only $2^{30}-2$ distinct board configurations. ???
+% Am I somehow miscounting? Because there is symmetry between two colors
+\subsection{Average number of natural explicit combos}
+Natural means all distinct boards are equally likely. Explicit means no implicit combos due to skyfalls.
+
+After doing Monte Carlo simulation with 10 million trials, we find the average number of combos is approximately 0.8562004.
+
+The exact value? Find out on the next episode of \textit{Cases: The Adventure}.
 \section{$m\times n$ board with $k$-matches}
 I don't know if this is even possible to study further than running a few Monte Carlo simulations. Combinatorics is hard.
 \end{document}
