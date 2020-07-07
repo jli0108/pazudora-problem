@@ -19,7 +19,7 @@
 \begin{document}
 \tableofcontents
 \section{Introduction}
-Consider the standard $5\times 6$ board in the popular mobile game \begin{CJK}{UTF8}{min}パズドラ\end{CJK}. If you apply a rainbow board refresh (assuming all six standard orbs are equally probable), what is the probability of $i$ matches (including skyfalls), for $i\in\N$?
+Consider the standard $6\times 5$ (6 columns, 5 rows) board in the popular mobile game \begin{CJK}{UTF8}{min}パズドラ\end{CJK}. If you apply a rainbow board refresh (assuming all six standard orbs are equally probable), what is the probability of $i$ matches (including skyfalls), for $i\in\N$?
 This is a deceptively hard problem as far as I can tell. I hope there is a nice closed form solution, but there probably isn't since it seems to involve partitioning.
 
 Consider the problem with skyfalls disabled.
@@ -196,8 +196,9 @@ It is not hard to enumerate all of the $6^4=1296$ possible boards, grouping them
 \end{axis}
 \end{tikzpicture}
 \end{center}
+This distribution is consistent with Monte Carlo simulations.
 \subsection{Skyfalls enabled}
-Now we can consider the board configurations as states of a discrete-time stochastic process. The first thing we should figure out is if this process is Markovian.
+Now we can consider the board configurations as states of a discrete-time stochastic process. The first thing we should figure out is if this process is Markovian. (Of course it is, since all predictive information about future combos is obtained by the current state of the board.) Another thing to consider is the fact that the number of combos is unbounded when skyfalls are enabled, but the expected number of combos is (probably?) finite.
 
 The best way to assign states is probably the distinct board configurations as listed above.
 
@@ -245,15 +246,41 @@ The best way to assign states is probably the distinct board configurations as l
     \begin{itemize}
         \item All of the orbs are cleared, so the initial boards are all equally likely. Prior information about the board is irrelevant.
     \end{itemize}
+With this information, let $x$ be the expected number of combos, including those contributed by skyfalls. Then we have
+\begin{align*}
+    x = 0(35/72) + (101/216)(1+x) + (5/108)(2+x)
+    \implies x = 121/105
+\end{align*}
+Thus the theoretical expected number of combos is 121/105.
+
+Next step: Confirm or deny using simulation.
+
+Luckily cascades are not possible in a $2\times 2$ board, otherwise analysis would be insanely difficult.
 \end{itemize}
 \subsection{Poison, mortal poison, jammer, bomb orbs enabled}
 What if we want to consider more than just the six standard orb colors? If we generalize to $c$ colors, the number of boards increases to $c^4$ boards. However, the same analysis of board configurations as before works, replacing all instances of 6 with $c$, as long as $c\geq 2\times 2$. If $c<4$, then the possible board configurations changes, along with their associated probabilities.
 
+For $c\geq 4$, we find the distribution for the initial board. Applying the same analysis as above results in the following:
+\begin{center}
+    \renewcommand{\arraystretch}{2}
+    \begin{tabular}{|c|c|}
+        \hline
+        Number of Combos & Probability \\
+        \hline\hline
+        0 & $\left[\binom{c}{4}\cdot 4! + 2 \cdot \binom{c}{3}\cdot 3! + \binom{c}{2} \cdot 2!\right]/c^4$\\
+        \hline
+        1 & $\left[4\cdot \binom{c}{3}\cdot 3!+4\cdot\binom{6}{2}\cdot 2! + c\right]/c^4$ \\
+        \hline
+        2 & $\left[2\cdot\binom{c}{2}\cdot 2!\right]/c^4$\\
+        \hline
+    \end{tabular}
+    \renewcommand{\arraystretch}{2}
+\end{center}
 Keep in mind this also assumes the $c$ different orb colors are assumed to be equally probable. Otherwise, the problem gets even more complicated.
 
 
-\section{$5\times 6$ board with 3-matches}
-We return to the classical problem on a $5\times 6$ board, allowing 3-matches.
+\section{$6\times 5$ board with 3-matches}
+We return to the classical problem on a $6\times 5$ board, allowing 3-matches.
 
 \subsection{Classifying boards based on number of colors}
 
@@ -312,11 +339,56 @@ We know there are $\binom{6}{2}\cdot 2^{30}-\binom{6}{1}$ bicolor boards from ea
 If we fix the two colors, there are only $2^{30}-2$ distinct board configurations. ???
 % Am I somehow miscounting? Because there is symmetry between two colors
 \subsection{Average number of natural explicit combos}
-Natural means all distinct boards are equally likely. Explicit means no implicit combos due to skyfalls.
+Natural means all distinct boards are equally likely. Explicit means no implicit combos due to skyfalls or cascades.
 
-After doing Monte Carlo simulation with 10 million trials, we find the average number of combos is approximately 0.8562004.
+After doing Monte Carlo simulation with 10 million trials, we find the average number of combos is approximately 0.8557792.
 
-The exact value? Find out on the next episode of \textit{Cases: The Adventure}.
+The approximate distribution is as follows:
+\begin{center}
+\begin{tabular}{|c|c|}
+    \hline
+    Combos & Approximate Probability \\
+    \hline\hline
+    0 combos & 0.3793952 \\
+    \hline
+    1 combo & 0.422572 \\
+    \hline
+    2 combos & 0.1651948 \\
+    \hline
+    3 combos & 0.0299233 \\
+    \hline
+    4 combos & 0.0027802 \\
+    \hline
+    5 combos & 0.000132 \\
+    \hline
+    6 combos & 0.0000025 \\
+    \hline
+    7 combos & 0 \\
+    \hline
+    8 combos & 0 \\
+    \hline
+    9 combos & 0 \\
+    \hline
+    10 combos & 0 \\
+    \hline
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    title=Simulated Initial Distribution,
+	ylabel=Probability,
+	ymax=1,
+	enlargelimits=0.15,
+	ybar,
+	xtick=data,
+	xlabel=Combos
+]
+\addplot coordinates {(0, 0.3793952) (1, 0.422572) (2, 0.1651948) (3, 0.0299233) (4, 0.0027802) (5, 0.000132) (6, 0.0000025) (7, 0) (8, 0) (9, 0) (10, 0)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+The exact values? Find out on the next episode of \textit{Cases: The Adventure}.
 \section{$m\times n$ board with $k$-matches}
 I don't know if this is even possible to study further than running a few Monte Carlo simulations. Combinatorics is hard.
 \end{document}
